@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- https://github.com/spring-projects/spring-boot/blob/v1.5.13.RELEASE/spring-boot/src/main/resources/org/springframework/boot/logging/logback/defaults.xml -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %level [%t] %logger{0} %m%n" />
+    <property name="APP_NAME" value="media-process-center" />
+    <property name="LOG_PATH" value="${user.home}/${APP_NAME}/logs" />
+    <property name="LOG_FILE" value="${LOG_PATH}/application.log" />
+    <property name="SERVICE_LOG_FILE" value="${LOG_PATH}/service_stdout.log" />
+    <property name="FUNC_MONITOR_LOG_FILE" value="${LOG_PATH}/func_monitor.log" />
+    <property name="SERVICE_MONITOR_LOG_FILE" value="${LOG_PATH}/service_monitor.log" />
+
+    <appender name="APPLICATION" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+            <totalSizeCap>2GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!-- log async setting for asi refactor-->
+    <appender name="ASYNC_APPLICATION" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- log block array queue size -->
+        <queueSize>512</queueSize>
+        <!-- default queueSize/5 -->
+        <discardingThreshold>102</discardingThreshold>
+        <!-- do not block the io which write log info to file -->
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="APPLICATION" />
+    </appender>
+    <appender name="SERVICE_STDOUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${SERVICE_LOG_FILE}</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${SERVICE_LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>3</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!-- log async setting for asi refactor-->
+    <appender name="ASYNC_SERVICE_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- log block array queue size -->
+        <queueSize>512</queueSize>
+        <!-- default queueSize/5 -->
+        <discardingThreshold>102</discardingThreshold>
+        <!-- do not block the io which write log info to file -->
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="SERVICE_STDOUT" />
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+    <!-- log async setting for asi refactor-->
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- log block array queue size -->
+        <queueSize>512</queueSize>
+        <!-- default queueSize/5 -->
+        <discardingThreshold>102</discardingThreshold>
+        <!-- do not block the io which write log info to file -->
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="CONSOLE" />
+    </appender>
+
+    <appender name="FUNC_MONITOR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${FUNC_MONITOR_LOG_FILE}</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${FUNC_MONITOR_LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+            <totalSizeCap>2GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!-- log async setting for asi refactor-->
+    <appender name="ASYNC_FUNC_MONITOR" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- log block array queue size -->
+        <queueSize>512</queueSize>
+        <!-- default queueSize/5 -->
+        <discardingThreshold>102</discardingThreshold>
+        <!-- do not block the io which write log info to file -->
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="FUNC_MONITOR" />
+    </appender>
+
+    <appender name="SERVICE_MONITOR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${SERVICE_MONITOR_LOG_FILE}</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${SERVICE_MONITOR_LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+            <totalSizeCap>2GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!-- log async setting for asi refactor-->
+    <appender name="ASYNC_SERVICE_MONITOR" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- log block array queue size -->
+        <queueSize>512</queueSize>
+        <!-- default queueSize/5 -->
+        <discardingThreshold>102</discardingThreshold>
+        <!-- do not block the io which write log info to file -->
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="SERVICE_MONITOR" />
+    </appender>
+
+    <root level="INFO">
+<!--        <appender-ref ref="ASYNC_CONSOLE" />-->
+        <appender-ref ref="ASYNC_APPLICATION" />
+<!--        <appender-ref ref="ASYNC_SERVICE_STDOUT" />-->
+    </root>
+
+    <logger name="func_monitor" level="INFO" additivity="true">
+        <appender-ref ref="ASYNC_FUNC_MONITOR" />
+    </logger>
+
+    <logger name="service_monitor" level="INFO" additivity="true">
+        <appender-ref ref="ASYNC_SERVICE_MONITOR" />
+    </logger>
+</configuration>
